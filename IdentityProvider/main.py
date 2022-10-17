@@ -52,7 +52,7 @@ def register_user(user: UserSchema = Body(default=None)):
     jwt = encode_jwt(user_id=user_id)
     return {"user_name":new_user["user_name"], "token":jwt}
 
-def get_users():
+def get_users_from_db():
     users_from_db = usersDB.fetch()
     for us in users_from_db.items:
         print(us)
@@ -70,11 +70,10 @@ def login_user(user: UserLoginSchema = Body(default=None)):
     for us in users_from_db.items:
         print(us)
         users.append(us)
-
     user_data = check_user(user)
     if user_data != None:
         jwt = encode_jwt(user_id=user_data["user_id"])
-        return {"user_name":user_data.user_name, "token":jwt}
+        return {"user_name":user_data["user_name"], "token":jwt}
     else:
         return {"error":"invalid login details!"}
 
